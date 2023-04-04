@@ -116,9 +116,6 @@ async function onConversation() {
         onDownloadProgress: ({ event }) => {
           const xhr = event.target
           const { responseText } = xhr
-          // 打印当前时间和响应内容
-          console.log(new Date().toLocaleString())
-          console.log(responseText)
           // Always process the final line
           const lastIndex = responseText.lastIndexOf('\n', responseText.length - 2)
           let chunk = responseText
