@@ -96,7 +96,7 @@ async function onConversation() {
     +uuid,
     {
       dateTime: new Date().toLocaleString(),
-      text: '',
+      text: '思考中...',
       loading: true,
       inversion: false,
       error: false,
@@ -228,7 +228,7 @@ async function onRegenerate(index: number) {
     index,
     {
       dateTime: new Date().toLocaleString(),
-      text: '',
+      text: '思考中...',
       inversion: false,
       error: false,
       loading: true,
