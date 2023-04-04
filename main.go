@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"mime"
 	"net/http"
+	"xyhelper-web/api"
 
 	"github.com/gabriel-vasile/mimetype"
 
@@ -74,6 +75,10 @@ func main() {
 		}
 		c.Data(http.StatusOK, "image/svg+xml", content)
 	})
+	apiGroup := r.Group("/api")
+	apiGroup.POST("/session", api.Session)
+	apiGroup.POST("/chat-process", api.ChatProcess)
+	apiGroup.POST("/config", api.Config)
 
 	r.Run() // 监听并在 0.0.0.0:8080 上启动服务
 }
