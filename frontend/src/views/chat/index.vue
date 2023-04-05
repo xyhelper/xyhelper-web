@@ -13,13 +13,16 @@ import { useUsingContext } from './hooks/useUsingContext'
 import HeaderComponent from './components/Header/index.vue'
 import { HoverButton, SvgIcon } from '@/components/common'
 import { useBasicLayout } from '@/hooks/useBasicLayout'
-import { useChatStore, usePromptStore } from '@/store'
+import { useChatStore, usePromptStore, useUserStore } from '@/store'
 import { fetchChatAPIProcess } from '@/api'
 import { t } from '@/locales'
 
 let controller = new AbortController()
 
 const openLongReply = import.meta.env.VITE_GLOB_OPEN_LONG_REPLY === 'true'
+const userStore = useUserStore()
+
+const userInfo = computed(() => userStore.userInfo)
 
 const route = useRoute()
 const dialog = useDialog()
@@ -112,6 +115,8 @@ async function onConversation() {
       await fetchChatAPIProcess<Chat.ConversationResponse>({
         prompt: message,
         options,
+        baseURI: userInfo.value.baseURI,
+        accessToken: userInfo.value.accessToken,
         signal: controller.signal,
         onDownloadProgress: ({ event }) => {
           const xhr = event.target
@@ -243,6 +248,8 @@ async function onRegenerate(index: number) {
       await fetchChatAPIProcess<Chat.ConversationResponse>({
         prompt: message,
         options,
+        baseURI: userInfo.value.baseURI,
+        accessToken: userInfo.value.accessToken,
         signal: controller.signal,
         onDownloadProgress: ({ event }) => {
           const xhr = event.target

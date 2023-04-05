@@ -29,6 +29,8 @@ type ChatProcessRequest struct {
 		ConversationId  string `json:"conversationId"`  // 会话ID
 		ParentMessageId string `json:"parentMessageId"` // 父消息ID
 	} `json:"options"` // 选项
+	BaseURI     string `json:"baseURI"`     // 基础URI
+	AccessToken string `json:"accessToken"` // 访问令牌
 }
 
 // ChatProcessResponse
@@ -54,11 +56,10 @@ func ChatProcess(c *gin.Context) {
 	}
 	// g.DumpWithType(req)
 
-	token := "xyhelper1231"
 	cli := chatgpt.NewClient(
-		chatgpt.WithAccessToken(token),
+		chatgpt.WithAccessToken(req.AccessToken),
 		chatgpt.WithTimeout(180*time.Second),
-		chatgpt.WithBaseURI("https://freechat.lidong.xin"),
+		chatgpt.WithBaseURI(req.BaseURI),
 	)
 	stream, err := cli.GetChatStream(req.Prompt, req.Optins.ConversationId, req.Optins.ParentMessageId)
 	// 如果返回404，说明会话不存在，重新获取会话
@@ -80,6 +81,7 @@ func ChatProcess(c *gin.Context) {
 	c.Stream(func(w io.Writer) bool {
 		for text := range stream.Stream {
 			// g.DumpWithType(text)
+			res.Id = text.MessageID
 			res.Text = text.Content
 			res.Role = "assistant"
 			res.ConversationId = text.ConversationID

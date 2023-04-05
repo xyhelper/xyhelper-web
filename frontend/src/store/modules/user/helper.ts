@@ -6,6 +6,8 @@ export interface UserInfo {
   avatar: string
   name: string
   description: string
+  baseURI: string
+  accessToken: string
 }
 
 export interface UserState {
@@ -13,11 +15,23 @@ export interface UserState {
 }
 
 export function defaultSetting(): UserState {
+  // 生成随机的字符串
+  function generateRandomString(length: number): string {
+    let result = ''
+    const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'
+    for (let i = 0; i < length; i++)
+      result += characters.charAt(Math.floor(Math.random() * characters.length))
+
+    return result
+  }
+  const randomString = generateRandomString(10)
   return {
     userInfo: {
-      avatar: 'https://raw.githubusercontent.com/Chanzhaoyu/chatgpt-web/main/src/assets/avatar.jpg',
-      name: 'ChenZhaoYu',
-      description: 'Star on <a href="https://github.com/Chanzhaoyu/chatgpt-bot" class="text-blue-500" target="_blank" >Github</a>',
+      avatar: 'https://xyhelper.cn/defaultavatar.jpeg',
+      name: '攻城狮老李',
+      description: '访问 <a href="https://xyhelper.cn" class="text-blue-500" target="_blank" >xyhelper.cn</a>',
+      baseURI: 'https://freechat.xyhelper.cn',
+      accessToken: randomString,
     },
   }
 }
