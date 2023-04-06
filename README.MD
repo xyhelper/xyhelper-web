@@ -1,6 +1,6 @@
 # xyhelper-web
 
-文档请查阅 [https://xyhelper.cn/web/](https://xyhlper.cn/web/)
+文档请查阅 [https://xyhelper.cn/web/](https://xyhelper.cn/web/)
 
 ## 环境变量
 
