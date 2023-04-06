@@ -42,5 +42,8 @@ if [ "$REMOTE_CONTAINERS" = "true" ]; then
     #     chmod +x gf &&
     #     ./gf install -y &&
     #     rm ./gf
+    docker run --privileged --rm tonistiigi/binfmt --install all
+	docker buildx create --use --name=qemu
+	docker buildx inspect --bootstrap
 
 fi
