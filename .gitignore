@@ -28,3 +28,4 @@ go.work
 go.work.sum
 node_modules
 .pnpm-store
+xyhelper-web
