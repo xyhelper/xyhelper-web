@@ -27,6 +27,7 @@ COPY --from=build /app/xyhelper-web /usr/local/bin/xyhelper-web
 
 # 设置环境变量
 ENV PORT=8080
+ENV GIN_MODE=release
 
 # 暴露端口
 EXPOSE $PORT

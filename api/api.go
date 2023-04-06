@@ -4,9 +4,11 @@ import (
 	"io"
 	"net/http"
 	"time"
+	"xyhelper-web/config"
 
 	"github.com/gin-gonic/gin"
 	"github.com/gogf/gf/v2/encoding/gjson"
+	"github.com/gogf/gf/v2/util/gconv"
 	"github.com/xyhelper/chatgpt-go"
 )
 
@@ -58,7 +60,7 @@ func ChatProcess(c *gin.Context) {
 
 	cli := chatgpt.NewClient(
 		chatgpt.WithAccessToken(req.AccessToken),
-		chatgpt.WithTimeout(180*time.Second),
+		chatgpt.WithTimeout(time.Duration(config.TimeOutMs*1000*1000)),
 		chatgpt.WithBaseURI(req.BaseURI),
 	)
 	stream, err := cli.GetChatStream(req.Prompt, req.Optins.ConversationId, req.Optins.ParentMessageId)
@@ -112,8 +114,8 @@ func Config(c *gin.Context) {
 		"message": "",
 		"data": gin.H{
 			"apiModel":     "ChatGPTUnofficialProxyAPI",
-			"reverseProxy": "https://freechat.lidong.xin/backend-api/conversation",
-			"timeoutMs":    100000,
+			"reverseProxy": "https://freechat.xyhelper.cn/backend-api/conversation",
+			"timeoutMs":    gconv.String(config.TimeOutMs/1000) + "秒",
 			"socksProxy":   "-",
 			"httpsProxy":   "-",
 			"balance":      "-",
