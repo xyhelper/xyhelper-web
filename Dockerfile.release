@@ -11,7 +11,7 @@ COPY . .
 RUN go env -w GOPROXY=https://goproxy.cn,direct
 
 # 编译应用程序
-RUN CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -o xyhelper-web .
+RUN CGO_ENABLED=0 GOOS=linux go build -ldflags="-X 'config.Version=${Version}'" -a -installsuffix cgo -o xyhelper-web .
 
 # 使用 alpine 作为基础镜像
 FROM alpine:latest

@@ -1,9 +1,9 @@
 <script setup lang='ts'>
 import type { Ref } from 'vue'
-import { computed, onMounted, onUnmounted, ref } from 'vue'
+import { computed, onMounted, onUnmounted, reactive, ref } from 'vue'
 import { useRoute } from 'vue-router'
 import { storeToRefs } from 'pinia'
-import { NAutoComplete, NButton, NInput, useDialog, useMessage } from 'naive-ui'
+import { NAutoComplete, NButton, NInput, NSwitch, useDialog, useMessage } from 'naive-ui'
 import html2canvas from 'html2canvas'
 import { Message } from './components'
 import { useScroll } from './hooks/useScroll'
@@ -18,6 +18,7 @@ import { fetchChatAPIProcess } from '@/api'
 import { t } from '@/locales'
 
 let controller = new AbortController()
+const ModelState = reactive({ isGPT4: false })
 
 const openLongReply = import.meta.env.VITE_GLOB_OPEN_LONG_REPLY === 'true'
 const userStore = useUserStore()
@@ -117,6 +118,7 @@ async function onConversation() {
         options,
         baseURI: userInfo.value.baseURI,
         accessToken: userInfo.value.accessToken,
+        isGPT4: ModelState.isGPT4,
         signal: controller.signal,
         onDownloadProgress: ({ event }) => {
           const xhr = event.target
@@ -251,6 +253,7 @@ async function onRegenerate(index: number) {
         baseURI: userInfo.value.baseURI,
         accessToken: userInfo.value.accessToken,
         signal: controller.signal,
+        isGPT4: ModelState.isGPT4,
         onDownloadProgress: ({ event }) => {
           const xhr = event.target
           const { responseText } = xhr
@@ -417,6 +420,13 @@ function handleStop() {
     loading.value = false
   }
 }
+function ChangeModel() {
+  if (!ModelState.isGPT4)
+    ms.success('已关闭gpt4模型')
+
+  else
+    ms.success('已开启gpt4模型,仅PLUS用户开启有效')
+}
 
 // 可优化部分
 // 搜索选项计算，这里使用value作为索引项，所以当出现重复value时渲染异常(多项同时出现选中效果)
@@ -538,6 +548,14 @@ onUnmounted(() => {
               <SvgIcon icon="ri:chat-history-line" />
             </span>
           </HoverButton>
+          <NSwitch v-model:value="ModelState.isGPT4" class="w-[160px]" @update:value="$enent => ChangeModel()">
+            <template #checked>
+              gpt4
+            </template>
+            <template #unchecked>
+              gpt3.5
+            </template>
+          </NSwitch>
           <NAutoComplete v-model:value="prompt" :options="searchOptions" :render-label="renderOption">
             <template #default="{ handleInput, handleBlur, handleFocus }">
               <NInput

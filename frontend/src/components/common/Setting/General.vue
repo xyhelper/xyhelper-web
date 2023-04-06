@@ -123,15 +123,15 @@ function handleImportButtonClick(): void {
     fileInput.click()
 }
 
-function handleRefreshBind(baseURI: string, accessToken: string) {
-  // RefreshBind(baseURI, accessToken).then((res) => {
-  //   if (res === 'success')
-  //     ms.success(t('common.success'))
+// function handleRefreshBind(baseURI: string, accessToken: string) {
+//   // RefreshBind(baseURI, accessToken).then((res) => {
+//   //   if (res === 'success')
+//   //     ms.success(t('common.success'))
 
-  //   else
-  //     ms.error(t('common.failed'))
-  // })
-}
+//   //   else
+//   //     ms.error(t('common.failed'))
+//   // })
+// }
 </script>
 
 <template>
@@ -145,9 +145,9 @@ function handleRefreshBind(baseURI: string, accessToken: string) {
         <NButton size="tiny" text type="primary" @click="updateUserInfo({ baseURI })">
           {{ $t('common.save') }}
         </NButton>
-        <NButton size="tiny" text type="warning" @click="handleRefreshBind(baseURI, accessToken)">
+        <!-- <NButton size="tiny" text type="warning" @click="handleRefreshBind(baseURI, accessToken)">
           {{ $t('common.refreshBinding') }}
-        </NButton>
+        </NButton> -->
       </div>
       <div class="flex items-center space-x-4">
         <span class="flex-shrink-0 w-[100px]">AccessToken</span>

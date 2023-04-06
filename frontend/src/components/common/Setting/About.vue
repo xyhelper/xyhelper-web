@@ -12,6 +12,7 @@ interface ConfigState {
   socksProxy?: string
   httpsProxy?: string
   balance?: string
+  version?: string
 }
 
 const authStore = useAuthStore()
@@ -42,7 +43,7 @@ onMounted(() => {
   <NSpin :show="loading">
     <div class="p-4 space-y-4">
       <h2 class="text-xl font-bold">
-        Version - {{ pkg.version }}
+        Version - {{ config?.version ?? '-' }}
       </h2>
       <div class="p-2 space-y-2 rounded-md bg-neutral-100 dark:bg-neutral-700">
         <p>
@@ -60,7 +61,7 @@ onMounted(() => {
             href="https://github.com/Chanzhaoyu/chatgpt-web"
             target="_blank"
           >
-            chatgpt-web
+            chatgpt-web - {{ pkg.version }}
           </a>
         </p>
         <p>

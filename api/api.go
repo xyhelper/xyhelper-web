@@ -33,6 +33,7 @@ type ChatProcessRequest struct {
 	} `json:"options"` // 选项
 	BaseURI     string `json:"baseURI"`     // 基础URI
 	AccessToken string `json:"accessToken"` // 访问令牌
+	IsGPT4      bool   `json:"isGPT4"`      // 是否为GPT4
 }
 
 // ChatProcessResponse
@@ -63,6 +64,9 @@ func ChatProcess(c *gin.Context) {
 		chatgpt.WithTimeout(time.Duration(config.TimeOutMs*1000*1000)),
 		chatgpt.WithBaseURI(req.BaseURI),
 	)
+	if req.IsGPT4 {
+		cli.SetModel("gpt-4")
+	}
 	stream, err := cli.GetChatStream(req.Prompt, req.Optins.ConversationId, req.Optins.ParentMessageId)
 	// 如果返回404，说明会话不存在，重新获取会话
 	if err != nil {
@@ -119,6 +123,7 @@ func Config(c *gin.Context) {
 			"socksProxy":   "-",
 			"httpsProxy":   "-",
 			"balance":      "-",
+			"version":      config.Version,
 		},
 	})
 }

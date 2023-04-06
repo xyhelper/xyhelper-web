@@ -7,6 +7,7 @@ import (
 
 var (
 	TimeOutMs = 180000
+	Version   = "dev"
 )
 
 func init() {
