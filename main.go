@@ -2,7 +2,6 @@ package main
 
 import (
 	"embed"
-	"fmt"
 	"mime"
 	"net/http"
 	"xyhelper-web/api"
@@ -18,13 +17,13 @@ import (
 var frontend embed.FS
 
 func main() {
-	dirEntries, err := frontend.ReadDir("frontend/dist/assets")
-	if err != nil {
-		panic(err)
-	}
-	for _, dirEntry := range dirEntries {
-		fmt.Println(dirEntry.Name())
-	}
+	// dirEntries, err := frontend.ReadDir("frontend/dist/assets")
+	// if err != nil {
+	// 	panic(err)
+	// }
+	// for _, dirEntry := range dirEntries {
+	// 	fmt.Println(dirEntry.Name())
+	// }
 
 	r := gin.Default()
 	r.GET("/ping", func(c *gin.Context) {
@@ -44,7 +43,7 @@ func main() {
 	r.GET("/assets/*path", func(c *gin.Context) {
 		path := c.Param("path")
 		ctx := c.Request.Context()
-		g.Log().Debug(ctx, "path", path)
+		// g.Log().Debug(ctx, "path", path)
 		content, err := frontend.ReadFile("frontend/dist/assets" + path)
 		if err != nil {
 			g.Log().Error(ctx, "err", err)
@@ -52,7 +51,7 @@ func main() {
 		}
 		extension := gfile.ExtName(path)
 		extension = "." + extension
-		g.Log().Debug(ctx, "extension", extension)
+		// g.Log().Debug(ctx, "extension", extension)
 		mimeType := mime.TypeByExtension(extension)
 		if mimeType == "" {
 			mimeType = mimetype.Detect(content).String()
