@@ -4,7 +4,7 @@ set -e
 
 # 生成版本号 如 1.2.3
 if [ -z "$1" ]; then
-    echo "请输入版本号"
+    echo "请输入版本号 如 1.2.3"
     exit 1
 fi
 version=$1
