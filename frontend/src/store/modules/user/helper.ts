@@ -27,9 +27,9 @@ export function defaultSetting(): UserState {
   const randomString = generateRandomString(10)
   return {
     userInfo: {
-      avatar: 'https://xyhelper.cn/defaultavatar.jpeg',
-      name: '攻城狮老李',
-      description: '访问 <a href="https://xyhelper.cn" class="text-blue-500" target="_blank" >xyhelper.cn</a>',
+      avatar: 'avatar.jpg',
+      name: '米卡传媒',
+      description: 'AI技术与影视制作平台',
       baseURI: 'https://freechat.xyhelper.cn',
       accessToken: randomString,
     },

@@ -1,1 +1,1 @@
-FROM xyhelper/xyhelper-web:latest
+FROM xyhelper/xyhelper-web:mika

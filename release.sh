@@ -24,10 +24,10 @@ cd frontend
 pnpm run build
 
 cd ..
-# docker build -t xyhelper/xyhelper-web:latest .
-# docker push xyhelper/xyhelper-web:latest
+docker build -t xyhelper/xyhelper-web:mika -f Dockerfile.release .
+docker push xyhelper/xyhelper-web:mika
 
-docker buildx build -f Dockerfile.release --build-arg VERSION=v$version --platform linux/amd64,linux/arm64,linux/arm/v7 -t xyhelper/xyhelper-web:latest --push .
-docker buildx build -f Dockerfile.release --build-arg VERSION=v$version --platform linux/amd64,linux/arm64,linux/arm/v7 -t xyhelper/xyhelper-web:$major --push .
-docker buildx build -f Dockerfile.release --build-arg VERSION=v$version --platform linux/amd64,linux/arm64,linux/arm/v7 -t xyhelper/xyhelper-web:$major.$minor --push .
-docker buildx build -f Dockerfile.release --build-arg VERSION=v$version --platform linux/amd64,linux/arm64,linux/arm/v7 -t xyhelper/xyhelper-web:$major.$minor.$patch --push .
+# docker buildx build -f Dockerfile.release --build-arg VERSION=v$version --platform linux/amd64,linux/arm64,linux/arm/v7 -t xyhelper/xyhelper-web:latest --push .
+# docker buildx build -f Dockerfile.release --build-arg VERSION=v$version --platform linux/amd64,linux/arm64,linux/arm/v7 -t xyhelper/xyhelper-web:$major --push .
+# docker buildx build -f Dockerfile.release --build-arg VERSION=v$version --platform linux/amd64,linux/arm64,linux/arm/v7 -t xyhelper/xyhelper-web:$major.$minor --push .
+# docker buildx build -f Dockerfile.release --build-arg VERSION=v$version --platform linux/amd64,linux/arm64,linux/arm/v7 -t xyhelper/xyhelper-web:$major.$minor.$patch --push .

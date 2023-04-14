@@ -26,9 +26,9 @@ const name = ref(userInfo.value.name ?? '')
 
 const description = ref(userInfo.value.description ?? '')
 
-const baseURI = ref(userInfo.value.baseURI ?? '')
+// const baseURI = ref(userInfo.value.baseURI ?? '')
 
-const accessToken = ref(userInfo.value.accessToken ?? '')
+// const accessToken = ref(userInfo.value.accessToken ?? '')
 
 const language = computed({
   get() {
@@ -137,7 +137,7 @@ function handleImportButtonClick(): void {
 <template>
   <div class="p-4 space-y-5 min-h-[200px]">
     <div class="space-y-6">
-      <div class="flex items-center space-x-4">
+      <!-- <div class="flex items-center space-x-4">
         <span class="flex-shrink-0 w-[100px]">BaseURI</span>
         <div class="flex-1">
           <NInput v-model:value="baseURI" placeholder="" />
@@ -145,9 +145,7 @@ function handleImportButtonClick(): void {
         <NButton size="tiny" text type="primary" @click="updateUserInfo({ baseURI })">
           {{ $t('common.save') }}
         </NButton>
-        <!-- <NButton size="tiny" text type="warning" @click="handleRefreshBind(baseURI, accessToken)">
-          {{ $t('common.refreshBinding') }}
-        </NButton> -->
+
       </div>
       <div class="flex items-center space-x-4">
         <span class="flex-shrink-0 w-[100px]">AccessToken</span>
@@ -157,7 +155,7 @@ function handleImportButtonClick(): void {
         <NButton size="tiny" text type="primary" @click="updateUserInfo({ accessToken })">
           {{ $t('common.save') }}
         </NButton>
-      </div>
+      </div> -->
       <div class="flex items-center space-x-4">
         <span class="flex-shrink-0 w-[100px]">{{ $t('setting.avatarLink') }}</span>
         <div class="flex-1">
