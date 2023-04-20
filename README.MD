@@ -7,3 +7,4 @@
 - PORT: 端口号，默认 8080
 - GIN_MODE: gin 模式，默认 release, 可选 debug 或 release
 - TIMEOUTMS: 超时时间(单位:毫秒)，默认 180000 毫秒
+- AUTH_SECRET_KEY: 登陆密码 默认为空

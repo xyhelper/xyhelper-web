@@ -3,6 +3,7 @@ package api
 import (
 	"io"
 	"net/http"
+	"os"
 	"time"
 	"xyhelper-web/config"
 
@@ -14,14 +15,50 @@ import (
 
 // Session
 func Session(c *gin.Context) {
+	auth := false
+	if os.Getenv("AUTH_SECRET_KEY") != "" {
+		auth = true
+	}
 	c.JSON(http.StatusOK, gin.H{
 		"status":  "Success",
 		"message": "",
 		"data": gin.H{
-			"auth":  false,
+			"auth":  auth,
 			"model": "ChatGPTUnofficialProxyAPI",
 		},
 	})
+}
+
+// VerifyRequest
+type VerifyRequest struct {
+	Token string `json:"token" binding:"required"`
+}
+
+// Verify
+func Verify(c *gin.Context) {
+	req := &VerifyRequest{}
+	if err := c.ShouldBindJSON(&req); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"status":  "Error",
+			"message": err.Error(),
+			"data":    nil,
+		})
+
+		return
+	}
+	if req.Token == os.Getenv("AUTH_SECRET_KEY") {
+		c.JSON(http.StatusOK, gin.H{
+			"status":  "Success",
+			"message": "",
+			"data":    nil,
+		})
+	} else {
+		c.JSON(http.StatusOK, gin.H{
+			"status":  "Error",
+			"message": "Token 错误",
+			"data":    nil,
+		})
+	}
 }
 
 // ChatProcessRequest
@@ -47,6 +84,18 @@ type ChatProcessResponse struct {
 
 // ChatProcess 响应
 func ChatProcess(c *gin.Context) {
+	if os.Getenv("AUTH_SECRET_KEY") != "" {
+		Authorization := c.GetHeader("Authorization")
+		if Authorization != "Bearer "+os.Getenv("AUTH_SECRET_KEY") {
+			c.JSON(http.StatusOK, gin.H{
+				"status":  "Unauthorized",
+				"message": "Token 错误",
+				"data":    nil,
+			})
+			return
+		}
+	}
+
 	var req ChatProcessRequest
 	if err := c.ShouldBindJSON(&req); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
