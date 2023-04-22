@@ -4,11 +4,14 @@ import (
 	"io"
 	"net/http"
 	"os"
+	"strings"
 	"time"
 	"xyhelper-web/config"
 
 	"github.com/gin-gonic/gin"
 	"github.com/gogf/gf/v2/encoding/gjson"
+	"github.com/gogf/gf/v2/frame/g"
+	"github.com/gogf/gf/v2/os/gctx"
 	"github.com/gogf/gf/v2/util/gconv"
 	"github.com/xyhelper/chatgpt-go"
 )
@@ -84,6 +87,9 @@ type ChatProcessResponse struct {
 
 // ChatProcess 响应
 func ChatProcess(c *gin.Context) {
+	// ctx := c.Request.Context()
+	// ctx = gctx.WithCtx(ctx)
+	ctx := gctx.New()
 	if os.Getenv("AUTH_SECRET_KEY") != "" {
 		Authorization := c.GetHeader("Authorization")
 		if Authorization != "Bearer "+os.Getenv("AUTH_SECRET_KEY") {
@@ -107,28 +113,66 @@ func ChatProcess(c *gin.Context) {
 		return
 	}
 	// g.DumpWithType(req)
+	BaseURI := req.BaseURI
+	if os.Getenv("BASE_URI") != "" {
+		BaseURI = os.Getenv("BASE_URI")
+	}
+	if BaseURI == "" {
+		BaseURI = "https://freechat.xyhelper.cn"
+	}
+	AccessToken := req.AccessToken
+	if os.Getenv("ACCESS_TOKEN") != "" {
+		AccessToken = os.Getenv("ACCESS_TOKEN")
+	}
 
 	cli := chatgpt.NewClient(
-		chatgpt.WithAccessToken(req.AccessToken),
+		chatgpt.WithAccessToken(AccessToken),
 		chatgpt.WithTimeout(time.Duration(config.TimeOutMs*1000*1000)),
-		chatgpt.WithBaseURI(req.BaseURI),
+		chatgpt.WithBaseURI(BaseURI),
 	)
 	if req.IsGPT4 {
 		cli.SetModel("gpt-4")
 	}
+	//  如果err不为空,循环获取会话
 	stream, err := cli.GetChatStream(req.Prompt, req.Optins.ConversationId, req.Optins.ParentMessageId)
-	// 如果返回404，说明会话不存在，重新获取会话
-	if err != nil {
+
+	for err != nil {
+		message := err.Error()
+		// stream, err = cli.GetChatStream(req.Prompt, req.Optins.ConversationId, req.Optins.ParentMessageId)
+		// 如果返回404，说明会话不存在，重新获取会话
 		if err.Error() == "send message failed: 404 Not Found" {
+			g.Log().Debug(ctx, "会话不存在，重新获取会话", req)
+			req.Optins.ConversationId = ""
 			stream, err = cli.GetChatStream(req.Prompt)
+			continue
 		}
-	}
-	if err != nil {
-		c.JSON(http.StatusOK, gin.H{
-			"status":  "Error",
-			"message": err.Error(),
-			"data":    nil,
-		})
+
+		// 如果返回202，且会话ID为空，且 req.BaseURI 不包含 personalchat ，则重新获取会话
+		if err.Error() == "send message failed: 202 Accepted" && req.Optins.ConversationId == "" && !strings.Contains(req.BaseURI, "personalchat") {
+			g.Log().Debug(ctx, "共享池新会话分配到未登录账号，重新获取会话", req)
+			stream, err = cli.GetChatStream(req.Prompt, req.Optins.ConversationId, req.Optins.ParentMessageId)
+			continue
+		}
+
+		switch err.Error() {
+		// 如果返回429，说明请求过于频繁，等待1秒后重新获取会话
+		case "send message failed: 429 Too Many Requests":
+			message = "当前请求过于频繁，请稍后再试，或联系客服 https://work.weixin.qq.com/kfid/kfc97c97206f588c396"
+		// 如果返回202，提示用户会话登陆中，请稍后再试
+		case "send message failed: 202 Accepted":
+			message = "当前会话登陆中，请稍后再试，或新建会话"
+		default:
+			message = err.Error() + "，请稍后再试，或联系客服 https://work.weixin.qq.com/kfid/kfc97c97206f588c396"
+		}
+
+		if err != nil {
+			c.JSON(http.StatusOK, gin.H{
+				"status":  "Error",
+				"message": message,
+				"data":    nil,
+			})
+			return
+		}
 	}
 	res := &ChatProcessResponse{}
 
@@ -166,8 +210,8 @@ func Config(c *gin.Context) {
 		"status":  "Success",
 		"message": "",
 		"data": gin.H{
-			"apiModel":     "ChatGPTUnofficialProxyAPI",
-			"reverseProxy": "https://freechat.xyhelper.cn/backend-api/conversation",
+			"apiModel":     "xyhelper",
+			"reverseProxy": "https://xyhelper.cn",
 			"timeoutMs":    gconv.String(config.TimeOutMs/1000) + "秒",
 			"socksProxy":   "-",
 			"httpsProxy":   "-",
