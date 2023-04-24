@@ -6,6 +6,7 @@ import { fetchSession } from '@/api'
 interface SessionResponse {
   auth: boolean
   model: 'ChatGPTAPI' | 'ChatGPTUnofficialProxyAPI'
+  kfurl: string
 }
 
 export interface AuthState {
@@ -22,6 +23,9 @@ export const useAuthStore = defineStore('auth-store', {
   getters: {
     isChatGPTAPI(state): boolean {
       return state.session?.model === 'ChatGPTAPI'
+    },
+    getKfurl(state): string {
+      return state.session?.kfurl || ''
     },
   },
 

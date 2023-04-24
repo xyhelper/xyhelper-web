@@ -3,7 +3,6 @@ import { computed, ref } from 'vue'
 import { NButton, NInput, NModal, useMessage } from 'naive-ui'
 import { fetchVerify } from '@/api'
 import { useAuthStore } from '@/store'
-import Icon403 from '@/icons/403.vue'
 
 interface Props {
   visible: boolean
@@ -12,6 +11,7 @@ interface Props {
 defineProps<Props>()
 
 const authStore = useAuthStore()
+const kfurl = ref(authStore.session?.kfurl ?? '')
 
 const ms = useMessage()
 
@@ -62,7 +62,8 @@ function handlePress(event: KeyboardEvent) {
           <p class="text-base text-center text-slate-500 dark:text-slate-500">
             {{ $t('common.unauthorizedTips') }}
           </p>
-          <Icon403 class="w-[200px] m-auto" />
+          <!-- <Icon403 class="w-[200px] m-auto" /> -->
+          <img class="w-[200px] m-auto" :src="kfurl">
         </header>
         <NInput v-model:value="token" type="password" placeholder="" @keypress="handlePress" />
         <NButton

@@ -28,6 +28,7 @@ func Session(c *gin.Context) {
 		"data": gin.H{
 			"auth":  auth,
 			"model": "ChatGPTUnofficialProxyAPI",
+			"kfurl": config.Kfurl,
 		},
 	})
 }

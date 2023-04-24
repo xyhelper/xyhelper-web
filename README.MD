@@ -10,3 +10,4 @@
 - AUTH_SECRET_KEY: 登陆密码 默认为空
 - BASE_URI: 基础路径 默认为空   当指定时，会忽略前端传递的 BaseURI 参数
 - ACCESS_TOKEN: 访问令牌 默认为空  当指定时，会忽略前端传递的 AccessToken 参数
+- KFURL: 提示注册时显示的图片地址，默认为联系客服二维码地址

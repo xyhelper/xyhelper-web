@@ -25,7 +25,7 @@ export default {
     success: '操作成功',
     failed: '操作失敗',
     verify: '驗證',
-    unauthorizedTips: '未經授權，請先進行驗證。',
+    unauthorizedTips: '未經授權，請先進行驗證。掃描 QR Code 取得授權碼。',
     refreshBinding: '重新綁定',
   },
   chat: {

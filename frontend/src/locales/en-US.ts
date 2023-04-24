@@ -25,7 +25,7 @@ export default {
     success: 'Success',
     failed: 'Failed',
     verify: 'Verify',
-    unauthorizedTips: 'Unauthorized, please verify first.',
+    unauthorizedTips: 'Unauthorized, please verify first. Scan to get the verification code.',
     refreshBinding: 'Refresh Binding',
   },
   chat: {
