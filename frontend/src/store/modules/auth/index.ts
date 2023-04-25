@@ -7,6 +7,8 @@ interface SessionResponse {
   auth: boolean
   model: 'ChatGPTAPI' | 'ChatGPTUnofficialProxyAPI'
   kfurl: string
+  fixedBaseURI: boolean
+  fixedAccessToken: boolean
 }
 
 export interface AuthState {

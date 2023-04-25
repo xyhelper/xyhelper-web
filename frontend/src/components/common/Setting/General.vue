@@ -3,7 +3,7 @@ import { computed, ref } from 'vue'
 import { NButton, NInput, NPopconfirm, NSelect, useMessage } from 'naive-ui'
 import type { Language, Theme } from '@/store/modules/app/helper'
 import { SvgIcon } from '@/components/common'
-import { useAppStore, useUserStore } from '@/store'
+import { useAppStore, useAuthStore, useUserStore } from '@/store'
 import type { UserInfo } from '@/store/modules/user/helper'
 import { getCurrentDate } from '@/utils/functions'
 import { useBasicLayout } from '@/hooks/useBasicLayout'
@@ -29,6 +29,10 @@ const description = ref(userInfo.value.description ?? '')
 const baseURI = ref(userInfo.value.baseURI ?? '')
 
 const accessToken = ref(userInfo.value.accessToken ?? '')
+
+const authStore = useAuthStore()
+const fixedAccessToken = ref(authStore.session?.fixedAccessToken)
+const fixedBaseURI = ref(authStore.session?.fixedBaseURI)
 
 const language = computed({
   get() {
@@ -63,6 +67,11 @@ const languageOptions: { label: string; key: Language; value: Language }[] = [
   { label: 'English', key: 'en-US', value: 'en-US' },
 ]
 
+const baseURIOptions: { label: string; value: string }[] = [
+  { label: '免费接入点', value: 'https://freechat.xyhelper.cn' },
+  { label: '独享接入点', value: 'https://personalchat.xyhelper.cn' },
+  { label: 'PLUS接入点', value: 'https://pluschat.xyhelper.cn' },
+]
 function updateUserInfo(options: Partial<UserInfo>) {
   userStore.updateUserInfo(options)
   ms.success(t('common.success'))
@@ -137,10 +146,16 @@ function handleImportButtonClick(): void {
 <template>
   <div class="p-4 space-y-5 min-h-[200px]">
     <div class="space-y-6">
-      <div class="flex items-center space-x-4">
+      <div v-if="!fixedBaseURI" class="flex items-center space-x-4">
         <span class="flex-shrink-0 w-[100px]">BaseURI</span>
         <div class="flex-1">
-          <NInput v-model:value="baseURI" placeholder="" />
+          <!-- <NInput v-model:value="baseURI" placeholder="" /> -->
+          <NSelect
+            v-model:value="baseURI"
+            filterable
+            tag
+            :options="baseURIOptions"
+          />
         </div>
         <NButton size="tiny" text type="primary" @click="updateUserInfo({ baseURI })">
           {{ $t('common.save') }}
@@ -149,7 +164,7 @@ function handleImportButtonClick(): void {
           {{ $t('common.refreshBinding') }}
         </NButton> -->
       </div>
-      <div class="flex items-center space-x-4">
+      <div v-if="!fixedAccessToken" class="flex items-center space-x-4">
         <span class="flex-shrink-0 w-[100px]">AccessToken</span>
         <div class="flex-1">
           <NInput v-model:value="accessToken" placeholder="" />

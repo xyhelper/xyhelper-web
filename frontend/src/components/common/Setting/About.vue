@@ -17,6 +17,8 @@ interface ConfigState {
 
 const authStore = useAuthStore()
 
+const kfurl = ref(authStore.session?.kfurl ?? '')
+
 const loading = ref(false)
 
 const config = ref<ConfigState>()
@@ -66,6 +68,10 @@ onMounted(() => {
         </p>
         <p>
           如果你觉得此项目对你有帮助，请在 Github 帮我点个 Star 或者给予一点赞助，谢谢！
+        </p>
+        <p>
+          使用中碰到问题,请扫码联系客服
+          <img class="w-[200px] m-auto" :src="kfurl">
         </p>
       </div>
       <p>{{ $t("setting.api") }}：{{ config?.apiModel ?? '-' }}</p>
