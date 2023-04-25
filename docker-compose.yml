@@ -8,3 +8,4 @@ services:
       - 8888:8080
     environment:
       AUTH_SECRET_KEY: 123456
+      BASE_URI: http://localhost:8888

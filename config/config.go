@@ -6,9 +6,11 @@ import (
 )
 
 var (
-	TimeOutMs = 180000
-	Version   = "dev"
-	Kfurl     = "https://work.weixin.qq.com/kf/kefu/qrcode?kfcode=kfc97c97206f588c396"
+	TimeOutMs   = 180000
+	Version     = "dev"
+	Kfurl       = "https://work.weixin.qq.com/kf/kefu/qrcode?kfcode=kfc97c97206f588c396"
+	BaseURI     = ""
+	AccessToken = ""
 )
 
 func init() {
@@ -21,6 +23,14 @@ func init() {
 	kfurl := g.Cfg().MustGetWithEnv(ctx, "KFURL")
 	if !kfurl.IsEmpty() {
 		Kfurl = kfurl.String()
+	}
+	baseURI := g.Cfg().MustGetWithEnv(ctx, "BASE_URI")
+	if !baseURI.IsEmpty() {
+		BaseURI = baseURI.String()
+	}
+	accessToken := g.Cfg().MustGetWithEnv(ctx, "ACCESS_TOKEN")
+	if !accessToken.IsEmpty() {
+		AccessToken = accessToken.String()
 	}
 
 }

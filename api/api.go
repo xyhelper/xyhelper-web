@@ -26,9 +26,11 @@ func Session(c *gin.Context) {
 		"status":  "Success",
 		"message": "",
 		"data": gin.H{
-			"auth":  auth,
-			"model": "ChatGPTUnofficialProxyAPI",
-			"kfurl": config.Kfurl,
+			"auth":             auth,
+			"model":            "ChatGPTUnofficialProxyAPI",
+			"kfurl":            config.Kfurl,
+			"fixedBaseURI":     config.BaseURI != "",
+			"fixedAccessToken": config.AccessToken != "",
 		},
 	})
 }
@@ -136,10 +138,10 @@ func ChatProcess(c *gin.Context) {
 	}
 	//  如果err不为空,循环获取会话
 	stream, err := cli.GetChatStream(req.Prompt, req.Optins.ConversationId, req.Optins.ParentMessageId)
-
+	var message string
+	kfurl := "![](" + config.Kfurl + ")"
 	for err != nil {
-		message := err.Error()
-		// stream, err = cli.GetChatStream(req.Prompt, req.Optins.ConversationId, req.Optins.ParentMessageId)
+
 		// 如果返回404，说明会话不存在，重新获取会话
 		if err.Error() == "send message failed: 404 Not Found" {
 			g.Log().Debug(ctx, "会话不存在，重新获取会话", req)
@@ -158,12 +160,12 @@ func ChatProcess(c *gin.Context) {
 		switch err.Error() {
 		// 如果返回429，说明请求过于频繁，等待1秒后重新获取会话
 		case "send message failed: 429 Too Many Requests":
-			message = "当前请求过于频繁，请稍后再试，或联系客服 https://work.weixin.qq.com/kfid/kfc97c97206f588c396"
+			message = "当前请求过于频繁，请稍后再试，或联系客服 " + kfurl
 		// 如果返回202，提示用户会话登陆中，请稍后再试
 		case "send message failed: 202 Accepted":
 			message = "当前会话登陆中，请稍后再试，或新建会话"
 		default:
-			message = err.Error() + "，请稍后再试，或联系客服 https://work.weixin.qq.com/kfid/kfc97c97206f588c396"
+			message = err.Error() + "，请稍后再试，或联系客服 " + kfurl
 		}
 
 		if err != nil {
