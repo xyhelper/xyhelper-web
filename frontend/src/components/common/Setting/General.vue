@@ -67,6 +67,11 @@ const languageOptions: { label: string; key: Language; value: Language }[] = [
   { label: 'English', key: 'en-US', value: 'en-US' },
 ]
 
+const baseURIOptions: { label: string; value: string }[] = [
+  { label: '免费接入点', value: 'https://freechat.xyhelper.cn' },
+  { label: '独享接入点', value: 'https://personalchat.xyhelper.cn' },
+  { label: 'PLUS接入点', value: 'https://pluschat.xyhelper.cn' },
+]
 function updateUserInfo(options: Partial<UserInfo>) {
   userStore.updateUserInfo(options)
   ms.success(t('common.success'))
@@ -144,7 +149,13 @@ function handleImportButtonClick(): void {
       <div v-if="!fixedBaseURI" class="flex items-center space-x-4">
         <span class="flex-shrink-0 w-[100px]">BaseURI</span>
         <div class="flex-1">
-          <NInput v-model:value="baseURI" placeholder="" />
+          <!-- <NInput v-model:value="baseURI" placeholder="" /> -->
+          <NSelect
+            v-model:value="baseURI"
+            filterable
+            tag
+            :options="baseURIOptions"
+          />
         </div>
         <NButton size="tiny" text type="primary" @click="updateUserInfo({ baseURI })">
           {{ $t('common.save') }}
