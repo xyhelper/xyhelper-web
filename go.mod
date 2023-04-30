@@ -6,6 +6,7 @@ require (
 	github.com/gabriel-vasile/mimetype v1.4.2
 	github.com/gin-gonic/gin v1.9.0
 	github.com/gogf/gf/v2 v2.3.3
+	github.com/xyhelper/chatgpt-go v1.0.4
 )
 
 require (
@@ -42,7 +43,6 @@ require (
 	github.com/tidwall/pretty v1.2.1 // indirect
 	github.com/twitchyliquid64/golang-asm v0.15.1 // indirect
 	github.com/ugorji/go/codec v1.2.11 // indirect
-	github.com/xyhelper/chatgpt-go v1.0.4 // indirect
 	go.opentelemetry.io/otel v1.7.0 // indirect
 	go.opentelemetry.io/otel/sdk v1.7.0 // indirect
 	go.opentelemetry.io/otel/trace v1.7.0 // indirect
