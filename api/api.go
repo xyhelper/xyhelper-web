@@ -160,7 +160,7 @@ func ChatProcess(c *gin.Context) {
 		switch err.Error() {
 		// 如果返回429，说明请求过于频繁，等待1秒后重新获取会话
 		case "send message failed: 429 Too Many Requests":
-			message = "当前请求过于频繁，请稍后再试，或联系客服 " + kfurl
+			message = "当前请求过于频繁，请稍后再试，或在设置中更换接入点。 联系客服 " + kfurl
 		// 如果返回202，提示用户会话登陆中，请稍后再试
 		case "send message failed: 202 Accepted":
 			message = "当前会话登陆中，请稍后再试，或新建会话"
