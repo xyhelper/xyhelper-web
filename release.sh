@@ -24,19 +24,23 @@ cd frontend
 pnpm run build
 
 cd ..
-docker build -f Dockerfile.release -t xyhelper/xyhelper-web:latest .
-docker push xyhelper/xyhelper-web:latest
-docker tag xyhelper/xyhelper-web:latest xyhelper/xyhelper-web:$major
-docker push xyhelper/xyhelper-web:$major
-docker tag xyhelper/xyhelper-web:latest xyhelper/xyhelper-web:$major.$minor
-docker push xyhelper/xyhelper-web:$major.$minor
-docker tag xyhelper/xyhelper-web:latest xyhelper/xyhelper-web:$major.$minor.$patch
-docker push xyhelper/xyhelper-web:$major.$minor.$patch
+# docker build -f Dockerfile.release -t xyhelper/xyhelper-web:latest .
+# docker push xyhelper/xyhelper-web:latest
+# docker tag xyhelper/xyhelper-web:latest xyhelper/xyhelper-web:$major
+# docker push xyhelper/xyhelper-web:$major
+# docker tag xyhelper/xyhelper-web:latest xyhelper/xyhelper-web:$major.$minor
+# docker push xyhelper/xyhelper-web:$major.$minor
+# docker tag xyhelper/xyhelper-web:latest xyhelper/xyhelper-web:$major.$minor.$patch
+# docker push xyhelper/xyhelper-web:$major.$minor.$patch
 
-# docker buildx build -f Dockerfile.release --build-arg VERSION=v$version --platform linux/amd64,linux/arm64,linux/arm/v7 -t xyhelper/xyhelper-web:latest --push .
-# docker buildx build -f Dockerfile.release --build-arg VERSION=v$version --platform linux/amd64,linux/arm64,linux/arm/v7 -t xyhelper/xyhelper-web:$major --push .
-# docker buildx build -f Dockerfile.release --build-arg VERSION=v$version --platform linux/amd64,linux/arm64,linux/arm/v7 -t xyhelper/xyhelper-web:$major.$minor --push .
-# docker buildx build -f Dockerfile.release --build-arg VERSION=v$version --platform linux/amd64,linux/arm64,linux/arm/v7 -t xyhelper/xyhelper-web:$major.$minor.$patch --push .
+docker buildx build -f Dockerfile.release --build-arg VERSION=v$version --platform linux/amd64,linux/arm64,linux/arm/v7 -t xyhelper/xyhelper-web:latest --push .
+docker buildx build -f Dockerfile.release --build-arg VERSION=v$version --platform linux/amd64,linux/arm64,linux/arm/v7 -t xyhelper/xyhelper-web:$major --push .
+docker buildx build -f Dockerfile.release --build-arg VERSION=v$version --platform linux/amd64,linux/arm64,linux/arm/v7 -t xyhelper/xyhelper-web:$major.$minor --push .
+docker buildx build -f Dockerfile.release --build-arg VERSION=v$version --platform linux/amd64,linux/arm64,linux/arm/v7 -t xyhelper/xyhelper-web:$major.$minor.$patch --push .
+
+#  获取当前时间
+current_time=$(date "+%Y-%m-%d %H:%M:%S")
+echo "$current_time build success and push to docker hub $version " >> release.log
 
 
 
