@@ -31,6 +31,8 @@ func Session(c *gin.Context) {
 			"kfurl":            config.Kfurl,
 			"fixedBaseURI":     config.BaseURI != "",
 			"fixedAccessToken": config.AccessToken != "",
+			"showPlusBtn":      config.ShowPlusBtn,
+			"adMessage":        config.AdMessage,
 		},
 	})
 }

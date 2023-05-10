@@ -11,6 +11,8 @@ var (
 	Kfurl       = "https://work.weixin.qq.com/kf/kefu/qrcode?kfcode=kfc97c97206f588c396"
 	BaseURI     = ""
 	AccessToken = ""
+	ShowPlusBtn = ""
+	AdMessage   = "Aha~"
 )
 
 func init() {
@@ -31,6 +33,14 @@ func init() {
 	accessToken := g.Cfg().MustGetWithEnv(ctx, "ACCESS_TOKEN")
 	if !accessToken.IsEmpty() {
 		AccessToken = accessToken.String()
+	}
+	showPlusBtn := g.Cfg().MustGetWithEnv(ctx, "SHOW_PLUS_BTN")
+	if !showPlusBtn.IsEmpty() {
+		ShowPlusBtn = showPlusBtn.String()
+	}
+	adMesage := g.Cfg().MustGetWithEnv(ctx, "AD_MESSAGE")
+	if !adMesage.IsEmpty() {
+		AdMessage = adMesage.String()
 	}
 
 }
