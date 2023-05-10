@@ -9,6 +9,8 @@ interface SessionResponse {
   kfurl: string
   fixedBaseURI: boolean
   fixedAccessToken: boolean
+  showPlusBtn: string
+  adMessage: string
 }
 
 export interface AuthState {

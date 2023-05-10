@@ -4,13 +4,14 @@ import { computed, ref, watch } from 'vue'
 import { NButton, NLayoutSider } from 'naive-ui'
 import List from './List.vue'
 import Footer from './Footer.vue'
-import { useAppStore, useChatStore } from '@/store'
+import { useAppStore, useAuthStore, useChatStore } from '@/store'
 import { useBasicLayout } from '@/hooks/useBasicLayout'
 import { PromptStore } from '@/components/common'
 
 const appStore = useAppStore()
 const chatStore = useChatStore()
-
+const authStore = useAuthStore()
+const showPlusBtn = ref(authStore.session?.showPlusBtn)
 const { isMobile } = useBasicLayout()
 const show = ref(false)
 
@@ -24,6 +25,10 @@ function handleAdd() {
 
 function handleUpdateCollapsed() {
   appStore.setSiderCollapsed(!collapsed.value)
+}
+
+function jumpToPlusPage() {
+  window.open(showPlusBtn.value ?? '', '_blank')
 }
 
 const getMobileClass = computed<CSSProperties>(() => {
@@ -80,6 +85,9 @@ watch(
           <List />
         </div>
         <div class="p-4">
+          <NButton v-if="showPlusBtn" block @click="jumpToPlusPage">
+            升级PLUS
+          </NButton>
           <NButton block @click="show = true">
             {{ $t('store.siderButton') }}
           </NButton>
