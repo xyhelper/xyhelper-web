@@ -1,0 +1,14 @@
+.buildpath
+.hgignore.swp
+.project
+.orig
+.swp
+.idea/
+.settings/
+.vscode/
+bin/
+**/.DS_Store
+main
+output/
+manifest/output/
+temp/
