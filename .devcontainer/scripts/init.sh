@@ -37,11 +37,11 @@ if [ "$REMOTE_CONTAINERS" = "true" ]; then
     go install github.com/cool-team-official/cool-admin-go/cool-tools@latest
     # 安装gf
     # echo "Installing gf use mirror ..."
-    # pgit wget -O gf \
-    #     https://github.com/gogf/gf/releases/latest/download/gf_$(go env GOOS)_$(go env GOARCH) &&
-    #     chmod +x gf &&
-    #     ./gf install -y &&
-    #     rm ./gf
+    pgit wget -O gf \
+        https://github.com/gogf/gf/releases/latest/download/gf_$(go env GOOS)_$(go env GOARCH) &&
+        chmod +x gf &&
+        ./gf install -y &&
+        rm ./gf
     docker run --privileged --rm tonistiigi/binfmt --install all
 	docker buildx create --use --name=qemu
 	docker buildx inspect --bootstrap

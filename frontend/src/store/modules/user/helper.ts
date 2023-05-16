@@ -26,28 +26,27 @@ export function defaultSetting(): UserState {
   }
   const randomString = generateRandomString(10)
   // 获取 https://freechat.xyhelper.cn/default-setting.json 中的配置
-  async function getRemoteSetting(): Promise<UserState> {
-    const response = await fetch('https://freechat.xyhelper.cn/default-setting.json')
-    const data = await response.json()
-    return data
-  }
+  // async function getRemoteSetting(): Promise<UserState> {
+  //   const response = await fetch('https://freechat.xyhelper.cn/default-setting.json')
+  //   const data = await response.json()
+  //   return data
+  // }
   // 从 https://freechat.xyhelper.cn/default-setting.json 中获取配置
   // 如果获取失败，则使用默认配置
-  try {
-    const remoteSetting = getRemoteSetting()
-    return remoteSetting as unknown as UserState
-  }
-  catch (error) {
-    // console.log(error)
-    return {
-      userInfo: {
-        avatar: 'https://xyhelper.cn/defaultavatar.jpeg',
-        name: '攻城狮老李',
-        description: '访问 <a href="https://xyhelper.cn" class="text-blue-500" target="_blank" >xyhelper.cn</a>',
-        baseURI: 'https://freechat.xyhelper.cn',
-        accessToken: randomString,
-      },
-    }
+  // try {
+  //   const remoteSetting = getRemoteSetting()
+  //   return remoteSetting as unknown as UserState
+  // }
+  // catch (error) {
+  // console.log(error)
+  return {
+    userInfo: {
+      avatar: '/defaultavatar.jpeg',
+      name: '攻城狮老李',
+      description: '访问 <a href="https://xyhelper.cn" class="text-blue-500" target="_blank" >xyhelper.cn</a>',
+      baseURI: 'https://freechat.xyhelper.cn',
+      accessToken: randomString,
+    },
   }
 }
 
