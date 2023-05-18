@@ -110,6 +110,19 @@ func ChatProcess(r *ghttp.Request) {
 		})
 	}
 	defer response.Close()
+	// 如果返回404，去掉会话ID，重新请求
+	if response.StatusCode == 404 {
+		conversationReq.ConversationID = ""
+		response, err = client.Post(ctx, req.BaseURI+"/backend-api/conversation", conversationReq)
+		if err != nil {
+			r.Response.WriteJsonExit(g.Map{
+				"status":  "Error",
+				"message": err.Error(),
+				"data":    nil,
+			})
+		}
+		defer response.Close()
+	}
 	if response.StatusCode != 200 {
 		r.Response.WriteJsonExit(g.Map{
 			"status":  "Error",
@@ -154,8 +167,8 @@ func ChatProcess(r *ghttp.Request) {
 
 		r.Response.Writefln("%s", gjson.New(message).MustToJson())
 		r.Response.Flush()
-		g.Log().Debug(ctx, "event.Data", text)
-		g.Log().Debug(ctx, "message", message)
+		// g.Log().Debug(ctx, "event.Data", text)
+		// g.Log().Debug(ctx, "message", message)
 	}
 	// 输出 [DONE] 信息
 	// r.Response.Writefln("data: %s]\n\n", "[DONE]")
