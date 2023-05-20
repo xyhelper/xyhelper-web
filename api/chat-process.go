@@ -3,6 +3,7 @@ package api
 import (
 	"io"
 	chatresponse "xyhelper-web/chat-response"
+	"xyhelper-web/config"
 
 	"github.com/gogf/gf/v2/encoding/gjson"
 	"github.com/gogf/gf/v2/frame/g"
@@ -65,6 +66,24 @@ type ConversationReq struct {
 
 func ChatProcess(r *ghttp.Request) {
 	ctx := r.Context()
+	if config.WeChatServer != "" {
+		wxOpenId, err := r.Session.Get("wxOpenId")
+		if err != nil {
+			r.Response.WriteJsonExit(g.Map{
+				"status":  "Error",
+				"message": "请先登录",
+				"data":    nil,
+			})
+		}
+		if wxOpenId.String() == "" {
+			r.Response.WriteJsonExit(g.Map{
+				"status":  "Unauthorized",
+				"message": "登陆失效，请重新登陆",
+				"data":    nil,
+			})
+		}
+	}
+
 	var req *ChatProcessRequest
 	if err := r.Parse(&req); err != nil {
 		r.Response.WriteJsonExit(g.Map{

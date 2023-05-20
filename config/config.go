@@ -6,15 +6,17 @@ import (
 )
 
 var (
-	TimeOutMs       = 180000
-	Version         = "dev"
-	Kfurl           = "https://work.weixin.qq.com/kf/kefu/qrcode?kfcode=kfc97c97206f588c396"
-	BaseURI         = ""
-	AccessToken     = ""
-	ShowPlusBtn     = ""
-	AdMessage       = "Aha~"
-	PORT            = 8080
-	AUTH_SECRET_KEY = ""
+	TimeOutMs         = 180000
+	Version           = "dev"
+	Kfurl             = "qrcode_for_gh_19eb5b090f33_258.jpg"
+	BaseURI           = ""
+	AccessToken       = ""
+	ShowPlusBtn       = ""
+	AdMessage         = "Aha~"
+	PORT              = 8080
+	AUTH_SECRET_KEY   = ""
+	WeChatServer      = ""
+	WechatServerToken = ""
 )
 
 func init() {
@@ -51,6 +53,14 @@ func init() {
 	authSecretKey := g.Cfg().MustGetWithEnv(ctx, "AUTH_SECRET_KEY")
 	if !authSecretKey.IsEmpty() {
 		AUTH_SECRET_KEY = authSecretKey.String()
+	}
+	wechatServer := g.Cfg().MustGetWithEnv(ctx, "WECHAT_SERVER")
+	if !wechatServer.IsEmpty() {
+		WeChatServer = wechatServer.String()
+	}
+	weChatServerToken := g.Cfg().MustGetWithEnv(ctx, "WECHAT_SERVER_TOKEN")
+	if !weChatServerToken.IsEmpty() {
+		WechatServerToken = weChatServerToken.String()
 	}
 
 }

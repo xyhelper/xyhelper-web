@@ -12,6 +12,9 @@ func Session(r *ghttp.Request) {
 	if config.AUTH_SECRET_KEY != "" {
 		auth = true
 	}
+	if config.WeChatServer != "" {
+		auth = true
+	}
 
 	r.Response.WriteJsonExit(g.Map{
 		"status":  "Success",
