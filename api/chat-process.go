@@ -83,7 +83,6 @@ func ChatProcess(r *ghttp.Request) {
 			})
 		}
 	}
-
 	var req *ChatProcessRequest
 	if err := r.Parse(&req); err != nil {
 		r.Response.WriteJsonExit(g.Map{

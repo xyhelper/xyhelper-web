@@ -25,8 +25,9 @@ export default {
     success: '操作成功',
     failed: '操作失败',
     verify: '验证',
-    unauthorizedTips: '未经授权，请先进行验证。扫码获取授权码。',
+    unauthorizedTips: '扫码关注公众号获取授权码进行验证。',
     refreshBinding: '刷新绑定',
+    logout: '退出登录',
   },
   chat: {
     newChatButton: '新建聊天',

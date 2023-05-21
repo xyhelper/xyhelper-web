@@ -268,6 +268,10 @@ function handleImportButtonClick(): void {
         <NButton size="small" @click="handleReset">
           {{ $t('common.reset') }}
         </NButton>
+        <!-- 退出登录 -->
+        <NButton size="small" type="error" @click="authStore.removeToken()">
+          {{ $t('common.logout') }}
+        </NButton>
       </div>
     </div>
   </div>
