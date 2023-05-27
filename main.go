@@ -1,15 +1,21 @@
 package main
 
 import (
+	"time"
 	"xyhelper-web/api"
 	"xyhelper-web/config"
 
 	"github.com/gogf/gf/v2/frame/g"
 	"github.com/gogf/gf/v2/os/gfile"
+	"github.com/gogf/gf/v2/os/gsession"
 )
 
 func main() {
 	s := g.Server()
+	if !gfile.Exists("./data/sessions") {
+		gfile.Mkdir("./data/sessions")
+	}
+	s.SetSessionStorage(gsession.NewStorageFile("./data/sessions", 3600*24*180*time.Second))
 	s.SetPort(config.PORT)
 	if gfile.Exists("frontend/dist") {
 		s.SetServerRoot("frontend/dist")

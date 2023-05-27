@@ -2,6 +2,7 @@ package api
 
 import (
 	"io"
+	"time"
 	chatresponse "xyhelper-web/chat-response"
 	"xyhelper-web/config"
 
@@ -22,7 +23,8 @@ type ChatProcessRequest struct {
 	} `json:"options"` // 选项
 	BaseURI     string `json:"baseURI"`     // 基础URI
 	AccessToken string `json:"accessToken"` // 访问令牌
-	IsGPT4      bool   `json:"isGPT4"`      // 是否为GPT4
+	// IsGPT4      bool   `json:"isGPT4"`      // 是否为GPT4
+	Model string `json:"model"` // 模型
 }
 
 // ChatProcessResponse
@@ -91,10 +93,10 @@ func ChatProcess(r *ghttp.Request) {
 			"data":    nil,
 		})
 	}
-	usermodel := "text-davinci-002-render-sha"
-	if req.IsGPT4 {
-		usermodel = "gpt-4"
-	}
+	// usermodel := "text-davinci-002-render-sha"
+	// if req.IsGPT4 {
+	// 	usermodel = "gpt-4"
+	// }
 	parentMessageId := uuid.New().String()
 	if req.Optins.ParentMessageId != "" {
 		parentMessageId = req.Optins.ParentMessageId
@@ -113,8 +115,9 @@ func ChatProcess(r *ghttp.Request) {
 		},
 		ConversationID:  req.Optins.ConversationId,
 		ParentMessageID: parentMessageId,
-		Model:           usermodel,
+		Model:           req.Model,
 	}
+	// g.Dump(conversationReq)
 
 	client := g.Client()
 	client.SetHeader("Authorization", "Bearer "+req.AccessToken)
@@ -130,6 +133,9 @@ func ChatProcess(r *ghttp.Request) {
 	defer response.Close()
 	// 如果返回404，去掉会话ID，重新请求
 	if response.StatusCode == 404 {
+		// 延时5秒
+		time.Sleep(5 * time.Second)
+
 		conversationReq.ConversationID = ""
 		response, err = client.Post(ctx, req.BaseURI+"/backend-api/conversation", conversationReq)
 		if err != nil {

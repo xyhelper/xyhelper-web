@@ -1,9 +1,9 @@
 <script setup lang='ts'>
 import type { Ref } from 'vue'
-import { computed, onMounted, onUnmounted, reactive, ref } from 'vue'
+import { computed, onMounted, onUnmounted, ref } from 'vue'
 import { useRoute } from 'vue-router'
 import { storeToRefs } from 'pinia'
-import { NAutoComplete, NButton, NInput, NSwitch, useDialog, useMessage } from 'naive-ui'
+import { NAutoComplete, NButton, NInput, NSelect, useDialog, useMessage } from 'naive-ui'
 import html2canvas from 'html2canvas'
 import { Message } from './components'
 import { useScroll } from './hooks/useScroll'
@@ -18,7 +18,7 @@ import { fetchChatAPIProcess } from '@/api'
 import { t } from '@/locales'
 
 let controller = new AbortController()
-const ModelState = reactive({ isGPT4: false })
+const model = ref<string>('text-davinci-002-render-sha')
 
 const openLongReply = import.meta.env.VITE_GLOB_OPEN_LONG_REPLY === 'true'
 const userStore = useUserStore()
@@ -53,7 +53,11 @@ const promptStore = usePromptStore()
 
 // 使用storeToRefs，保证store修改后，联想部分能够重新渲染
 const { promptList: promptTemplate } = storeToRefs<any>(promptStore)
-
+const modelOptions: { label: string; value: string }[] = [
+  { label: '3.5', value: 'text-davinci-002-render-sha' },
+  { label: '4.0', value: 'gpt-4' },
+  { label: '无限4.0', value: 'gpt-4-mobile' },
+]
 // 未知原因刷新页面，loading 状态不会重置，手动重置
 dataSources.value.forEach((item, index) => {
   if (item.loading)
@@ -119,7 +123,7 @@ async function onConversation() {
         options,
         baseURI: userInfo.value.baseURI,
         accessToken: userInfo.value.accessToken,
-        isGPT4: ModelState.isGPT4,
+        model: model.value,
         signal: controller.signal,
         onDownloadProgress: ({ event }) => {
           const xhr = event.target
@@ -254,7 +258,7 @@ async function onRegenerate(index: number) {
         baseURI: userInfo.value.baseURI,
         accessToken: userInfo.value.accessToken,
         signal: controller.signal,
-        isGPT4: ModelState.isGPT4,
+        model: model.value,
         onDownloadProgress: ({ event }) => {
           const xhr = event.target
           const { responseText } = xhr
@@ -422,11 +426,20 @@ function handleStop() {
   }
 }
 function ChangeModel() {
-  if (!ModelState.isGPT4)
-    ms.success('已关闭gpt4模型')
+  switch (model.value) {
+    case 'text-davinci-002-render-sha':
+      ms.success('已切换至3.5模型,该模型可免费使用')
+      break
+    case 'gpt-4':
+      ms.success('已切换至4.0模型,请注意4.0模型的使用限制为25次/3小时,仅限PLUS会员使用')
+      break
+    case 'gpt-4-mobile':
+      ms.success('已切换至无限制4.0模型,仅限PLUS会员使用')
+      break
 
-  else
-    ms.success('已开启gpt4模型,仅PLUS用户开启有效')
+    default:
+      break
+  }
 }
 
 // 可优化部分
@@ -549,14 +562,22 @@ onUnmounted(() => {
               <SvgIcon icon="ri:chat-history-line" />
             </span>
           </HoverButton>
-          <NSwitch v-model:value="ModelState.isGPT4" class="w-[160px]" @update:value="$enent => ChangeModel()">
+          <NSelect
+            v-model:value="model"
+            filterable
+            tag
+            :options="modelOptions"
+            style="width: 160px"
+            @update:value="$event => ChangeModel()"
+          />
+          <!-- <NSwitch v-model:value="ModelState.isGPT4" class="w-[160px]" @update:value="$enent => ChangeModel()">
             <template #checked>
               gpt4
             </template>
             <template #unchecked>
               gpt3.5
             </template>
-          </NSwitch>
+          </NSwitch> -->
           <NAutoComplete v-model:value="prompt" :options="searchOptions" :render-label="renderOption">
             <template #default="{ handleInput, handleBlur, handleFocus }">
               <NInput

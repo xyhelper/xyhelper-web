@@ -71,7 +71,7 @@ const baseURIOptions: { label: string; value: string }[] = [
   { label: '免费1', value: 'https://freechat.xyhelper.cn' },
   { label: '免费2', value: 'https://freechat2.xyhelper.cn' },
   { label: '独享接入点', value: 'https://personalchat.xyhelper.cn' },
-  { label: 'PLUS接入点', value: 'https://pluschat.xyhelper.cn' },
+  { label: 'PLUS接入点', value: 'https://pluschat.xyhelper.com.cn' },
 ]
 function updateUserInfo(options: Partial<UserInfo>) {
   userStore.updateUserInfo(options)

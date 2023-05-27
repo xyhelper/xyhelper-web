@@ -26,7 +26,7 @@ export function fetchChatAPIProcess<T = any>(
     options?: { conversationId?: string; parentMessageId?: string }
     baseURI?: string
     accessToken?: string
-    isGPT4?: boolean
+    model?: string
     signal?: GenericAbortSignal
     onDownloadProgress?: (progressEvent: AxiosProgressEvent) => void },
 ) {
@@ -34,7 +34,7 @@ export function fetchChatAPIProcess<T = any>(
 
   return post<T>({
     url: '/chat-process',
-    data: { prompt: params.prompt, options: params.options, systemMessage: settingStore.systemMessage, baseURI: params.baseURI, accessToken: params.accessToken, isGPT4: params.isGPT4 },
+    data: { prompt: params.prompt, options: params.options, systemMessage: settingStore.systemMessage, baseURI: params.baseURI, accessToken: params.accessToken, model: params.model },
     signal: params.signal,
     onDownloadProgress: params.onDownloadProgress,
   })
