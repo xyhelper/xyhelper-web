@@ -18,7 +18,6 @@ import { fetchChatAPIProcess } from '@/api'
 import { t } from '@/locales'
 
 let controller = new AbortController()
-const model = ref<string>('text-davinci-002-render-sha')
 
 const openLongReply = import.meta.env.VITE_GLOB_OPEN_LONG_REPLY === 'true'
 const userStore = useUserStore()
@@ -40,6 +39,8 @@ const { usingContext, toggleUsingContext } = useUsingContext()
 
 const { uuid } = route.params as { uuid: string }
 
+const model = ref<string>(chatStore.getMessageModel(+uuid) || 'text-davinci-002-render-sha')
+
 const dataSources = computed(() => chatStore.getChatByUuid(+uuid))
 const conversationList = computed(() => dataSources.value.filter(item => (!item.inversion && !item.error)))
 
@@ -58,6 +59,13 @@ const modelOptions: { label: string; value: string }[] = [
   { label: '4.0', value: 'gpt-4' },
   { label: '无限4.0', value: 'gpt-4-mobile' },
 ]
+const modelSuccessSelect = computed((): boolean => {
+  const length: number = dataSources.value.length
+  // 长度大于零v表示有记录。true表示无法选择；false表示可以选择
+  if (length)
+    return true
+  return false
+})
 // 未知原因刷新页面，loading 状态不会重置，手动重置
 dataSources.value.forEach((item, index) => {
   if (item.loading)
@@ -88,6 +96,7 @@ async function onConversation() {
       error: false,
       conversationOptions: null,
       requestOptions: { prompt: message, options: null },
+      messageModel: model.value,
     },
   )
   scrollToBottom()
@@ -111,6 +120,7 @@ async function onConversation() {
       error: false,
       conversationOptions: null,
       requestOptions: { prompt: message, options: { ...options } },
+      messageModel: model.value,
     },
   )
   scrollToBottom()
@@ -146,6 +156,7 @@ async function onConversation() {
                 loading: true,
                 conversationOptions: { conversationId: data.conversationId, parentMessageId: data.id },
                 requestOptions: { prompt: message, options: { ...options } },
+                messageModel: model.value,
               },
             )
 
@@ -209,6 +220,7 @@ async function onConversation() {
         loading: false,
         conversationOptions: null,
         requestOptions: { prompt: message, options: { ...options } },
+        messageModel: model.value,
       },
     )
     scrollToBottomIfAtBottom()
@@ -246,6 +258,7 @@ async function onRegenerate(index: number) {
       loading: true,
       conversationOptions: null,
       requestOptions: { prompt: message, ...options },
+      messageModel: model.value,
     },
   )
 
@@ -280,6 +293,7 @@ async function onRegenerate(index: number) {
                 loading: true,
                 conversationOptions: { conversationId: data.conversationId, parentMessageId: data.id },
                 requestOptions: { prompt: message, ...options },
+                messageModel: model.value,
               },
             )
 
@@ -324,6 +338,7 @@ async function onRegenerate(index: number) {
         loading: false,
         conversationOptions: null,
         requestOptions: { prompt: message, ...options },
+        messageModel: model.value,
       },
     )
   }
@@ -567,6 +582,7 @@ onUnmounted(() => {
             filterable
             tag
             :options="modelOptions"
+            :disabled="modelSuccessSelect"
             style="width: 160px"
             @update:value="$event => ChangeModel()"
           />

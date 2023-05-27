@@ -20,6 +20,13 @@ export const useChatStore = defineStore('chat-store', {
         return state.chat.find(item => item.uuid === state.active)?.data ?? []
       }
     },
+    getMessageModel(state: Chat.ChatState) {
+      return (uuid?: number) => {
+        if (uuid)
+          return state.history.find(item => item.uuid === uuid)?.messageModel
+        return state.history.find(item => item.uuid === state.active)?.messageModel
+      }
+    },
   },
 
   actions: {
@@ -96,15 +103,17 @@ export const useChatStore = defineStore('chat-store', {
       if (!uuid || uuid === 0) {
         if (this.history.length === 0) {
           const uuid = Date.now()
-          this.history.push({ uuid, title: chat.text, isEdit: false })
+          this.history.push({ uuid, title: chat.text, isEdit: false, messageModel: 'text-davinci-002-render-sha' })
           this.chat.push({ uuid, data: [chat] })
           this.active = uuid
           this.recordState()
         }
         else {
           this.chat[0].data.push(chat)
-          if (this.history[0].title === 'New Chat')
+          if (this.history[0].title === 'NewChat') {
             this.history[0].title = chat.text
+            this.history[0].messageModel = chat.messageModel
+          }
           this.recordState()
         }
       }
@@ -112,8 +121,10 @@ export const useChatStore = defineStore('chat-store', {
       const index = this.chat.findIndex(item => item.uuid === uuid)
       if (index !== -1) {
         this.chat[index].data.push(chat)
-        if (this.history[index].title === 'New Chat')
+        if (this.history[index].title === 'NewChat') {
           this.history[index].title = chat.text
+          this.history[index].messageModel = chat.messageModel
+        }
         this.recordState()
       }
     },

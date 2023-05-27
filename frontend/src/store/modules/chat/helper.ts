@@ -7,7 +7,7 @@ export function defaultState(): Chat.ChatState {
   return {
     active: uuid,
     usingContext: true,
-    history: [{ uuid, title: 'New Chat', isEdit: false }],
+    history: [{ uuid, title: 'NewChat', isEdit: false, messageModel: 'text-davinci-002-render-sha' }],
     chat: [{ uuid, data: [] }],
   }
 }
