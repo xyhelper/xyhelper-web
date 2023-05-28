@@ -18,7 +18,7 @@ const show = ref(false)
 const collapsed = computed(() => appStore.siderCollapsed)
 
 function handleAdd() {
-  chatStore.addHistory({ title: 'New Chat', uuid: Date.now(), isEdit: false })
+  chatStore.addHistory({ title: 'NewChat', uuid: Date.now(), isEdit: false, messageModel: 'text-davinci-002-render-sha' })
   if (isMobile.value)
     appStore.setSiderCollapsed(true)
 }

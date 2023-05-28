@@ -8,19 +8,21 @@ declare namespace Chat {
 		loading?: boolean
 		conversationOptions?: ConversationRequest | null
 		requestOptions: { prompt: string; options?: ConversationRequest | null }
+		messageModel: string
 	}
 
 	interface History {
 		title: string
 		isEdit: boolean
 		uuid: number
+		messageModel: string
 	}
 
 	interface ChatState {
 		active: number | null
 		usingContext: boolean;
 		history: History[]
-		chat: { uuid: number; data: Chat[] }[]
+		chat: { uuid: number; data: Chat[] }[];
 	}
 
 	interface ConversationRequest {

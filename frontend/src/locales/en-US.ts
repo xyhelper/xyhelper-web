@@ -29,7 +29,7 @@ export default {
     refreshBinding: 'Refresh Binding',
   },
   chat: {
-    newChatButton: 'New Chat',
+    newChatButton: 'NewChat',
     placeholder: 'Ask me anything...(Shift + Enter = line break)',
     placeholderMobile: 'Ask me anything...',
     copy: 'Copy',
