@@ -122,7 +122,12 @@ func ChatProcess(r *ghttp.Request) {
 	client := g.Client()
 	client.SetHeader("Authorization", "Bearer "+req.AccessToken)
 	client.SetHeader("Content-Type", "application/json")
-	response, err := client.Post(ctx, req.BaseURI+"/backend-api/conversation", conversationReq)
+	baseURI := req.BaseURI
+	if config.BaseURI != "" {
+		baseURI = config.BaseURI
+	}
+
+	response, err := client.Post(ctx, baseURI+"/backend-api/conversation", conversationReq)
 	if err != nil {
 		r.Response.WriteJsonExit(g.Map{
 			"status":  "Error",
