@@ -16,6 +16,7 @@ func main() {
 		gfile.Mkdir("./data/sessions")
 	}
 	s.SetSessionStorage(gsession.NewStorageFile("./data/sessions", 3600*24*180*time.Second))
+	s.SetSessionCookieMaxAge(3600 * 24 * 180)
 	s.SetPort(config.PORT)
 	if gfile.Exists("frontend/dist") {
 		s.SetServerRoot("frontend/dist")
