@@ -165,18 +165,25 @@ func ChatProcess(r *ghttp.Request) {
 			"data":    nil,
 		})
 	}
-	if response.StatusCode != 429 {
+	if response.StatusCode == 429 {
 		r.Response.WriteJsonExit(g.Map{
 			"status":  "Error",
 			"message": "请求失败" + response.Status + ", 当前请求过多，请稍后再试,或新建聊天窗口",
 			"data":    nil,
 		})
 	}
-	if response.StatusCode != 200 {
-
+	if response.StatusCode == 413 {
 		r.Response.WriteJsonExit(g.Map{
 			"status":  "Error",
-			"message": "请求失败" + response.Status,
+			"message": "请求失败" + response.Status + ", 请求内容过长，请重新输入",
+			"data":    nil,
+		})
+	}
+
+	if response.StatusCode != 200 {
+		r.Response.WriteJsonExit(g.Map{
+			"status":  "Error",
+			"message": "请求失败" + response.Status + ", 请联系客服",
 			"data":    nil,
 		})
 	}
