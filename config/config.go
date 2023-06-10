@@ -17,6 +17,7 @@ var (
 	AUTH_SECRET_KEY   = ""
 	WeChatServer      = ""
 	WechatServerToken = ""
+	ShowAbout         = false
 )
 
 func init() {
@@ -61,6 +62,10 @@ func init() {
 	weChatServerToken := g.Cfg().MustGetWithEnv(ctx, "WECHAT_SERVER_TOKEN")
 	if !weChatServerToken.IsEmpty() {
 		WechatServerToken = weChatServerToken.String()
+	}
+	showAbout := g.Cfg().MustGetWithEnv(ctx, "SHOW_ABOUT")
+	if !showAbout.IsEmpty() {
+		ShowAbout = showAbout.Bool()
 	}
 
 }

@@ -33,6 +33,7 @@ const show = computed({
     emit('update:visible', visible)
   },
 })
+const showAbout = ref(authStore.session?.showAbout ?? false)
 </script>
 
 <template>
@@ -57,7 +58,7 @@ const show = computed({
             <Advanced />
           </div>
         </NTabPane>
-        <NTabPane name="Config" tab="Config">
+        <NTabPane v-if="showAbout" name="Config" tab="Config">
           <template #tab>
             <SvgIcon class="text-lg" icon="ri:list-settings-line" />
             <span class="ml-2">{{ $t('setting.config') }}</span>

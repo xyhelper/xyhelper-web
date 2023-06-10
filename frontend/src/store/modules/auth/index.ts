@@ -11,6 +11,7 @@ interface SessionResponse {
   fixedAccessToken: boolean
   showPlusBtn: string
   adMessage: string
+  showAbout: boolean
 }
 
 export interface AuthState {
