@@ -41,10 +41,10 @@ export function defaultSetting(): UserState {
   // console.log(error)
   return {
     userInfo: {
-      avatar: '/defaultavatar.jpeg',
-      name: '攻城狮老李',
-      description: '访问 <a href="https://xyhelper.cn" class="text-blue-500" target="_blank" >xyhelper.cn</a>',
-      baseURI: 'https://freechat.xyhelper.cn',
+      avatar: '',
+      name: '人类',
+      description: '分享AI知识，共享AI资源',
+      baseURI: 'https://pluschat.xyhelper.com.cn',
       accessToken: randomString,
     },
   }

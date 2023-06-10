@@ -36,6 +36,7 @@ type ChatProcessResponse struct {
 	ParentMessageId string `json:"parentMessageId"` // 父消息ID
 	ConversationId  string `json:"conversationId"`  // 会话ID
 	Text            string `json:"text"`            // 消息内容
+	FinishType      string `json:"finishType"`      // 结束类型
 }
 
 type Message struct {
@@ -220,6 +221,7 @@ func ChatProcess(r *ghttp.Request) {
 		if err != nil {
 			continue
 		}
+		// g.Log().Debug(ctx, "chatResponse", chatResponse)
 		if chatResponse.Message.Author.Role != "assistant" {
 			continue
 		}
@@ -229,22 +231,17 @@ func ChatProcess(r *ghttp.Request) {
 			ParentMessageId: req.Optins.ParentMessageId,
 			ConversationId:  chatResponse.ConversationID,
 			Text:            chatResponse.Message.Content.Parts[0],
+			FinishType:      chatResponse.Message.Metadata.FinishDetails.Type,
 		}
+		// g.Log().Debug(ctx, "message", message)
 
 		_, err = fmt.Fprintf(rw, "%s\n", gjson.New(message).String())
 		if err != nil {
 			g.Log().Error(ctx, "fmt.Fprintf error", err)
-			break
+			response.Body.Close()
+			continue
 		}
 		flusher.Flush()
-
-		// r.Response.Writefln("%s", gjson.New(message).MustToJson())
-		// r.Response.Flush()
-		// g.Log().Debug(ctx, "event.Data", text)
-		// g.Log().Debug(ctx, "message", message)
 	}
-	// 输出 [DONE] 信息
-	// r.Response.Writefln("data: %s]\n\n", "[DONE]")
-	// r.Response.Flush()
 
 }
