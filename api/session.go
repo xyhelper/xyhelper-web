@@ -27,6 +27,7 @@ func Session(r *ghttp.Request) {
 			"fixedAccessToken": config.AccessToken != "",
 			"showPlusBtn":      config.ShowPlusBtn,
 			"adMessage":        config.AdMessage,
+			"showAbout":        config.ShowAbout,
 		},
 	})
 }
