@@ -57,7 +57,6 @@ const { promptList: promptTemplate } = storeToRefs<any>(promptStore)
 const modelOptions: { label: string; value: string }[] = [
   { label: '3.5', value: 'text-davinci-002-render-sha' },
   { label: '4.0', value: 'gpt-4' },
-  { label: '无限4.0', value: 'gpt-4-mobile' },
 ]
 const modelSuccessSelect = computed((): boolean => {
   const length: number = dataSources.value.length
