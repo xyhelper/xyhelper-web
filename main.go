@@ -16,7 +16,7 @@ func main() {
 		gfile.Mkdir("./data/sessions")
 	}
 	s.SetSessionStorage(gsession.NewStorageFile("./data/sessions", 3600*24*180*time.Second))
-	s.SetSessionCookieMaxAge(3600 * 24 * 180)
+	s.SetSessionCookieMaxAge(3600 * 24 * 180 * time.Second)
 	s.SetPort(config.PORT)
 	if gfile.Exists("frontend/dist") {
 		s.SetServerRoot("frontend/dist")
@@ -28,5 +28,6 @@ func main() {
 	apiGroup.POST("/chat-process", api.ChatProcess)
 	// apiGroup.POST("/config", api.Config)
 	apiGroup.POST("/verify", api.Verify)
+	apiGroup.POST("/pushtoken", api.PushToken)
 	s.Run()
 }
